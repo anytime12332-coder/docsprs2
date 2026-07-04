@@ -6,7 +6,8 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 # Use npm ci when a lockfile is present (reproducible); otherwise fall back
 # to npm install so the build does not fail when no lockfile is committed.
-RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps; fi
+
 
 # Build
 FROM base AS builder
