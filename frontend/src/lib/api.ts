@@ -3,9 +3,10 @@ import { TokenResponse } from './types';
 
 // On Railway: frontend calls backend directly via NEXT_PUBLIC_API_URL
 // Locally: defaults to empty string (same origin) or localhost
-const API_BASE = typeof window !== 'undefined'
+const API_BASE_RAW = typeof window !== 'undefined'
   ? (process.env.NEXT_PUBLIC_API_URL || '')
   : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
+const API_BASE = API_BASE_RAW.replace(/\/+$/, '');
 
 class ApiClient {
   private client: AxiosInstance;
