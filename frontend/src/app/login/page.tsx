@@ -6,6 +6,19 @@ import { useAuth } from '@/contexts/AuthContext';
 import toast from 'react-hot-toast';
 import { FileText, Lock, Mail, Loader2 } from 'lucide-react';
 
+function getLoginErrorMessage(error: any) {
+  if (error.response?.data?.detail) {
+    return error.response.data.detail;
+  }
+  if (error.response?.status === 404) {
+    return 'Login API not found. Check the frontend NEXT_PUBLIC_API_URL setting.';
+  }
+  if (error.code === 'ERR_NETWORK' || !error.response) {
+    return 'Cannot reach the backend. Check the API URL and backend CORS settings.';
+  }
+  return 'Login failed';
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +34,7 @@ export default function LoginPage() {
       toast.success('Welcome back!');
       router.push('/dashboard');
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Login failed');
+       toast.error(getLoginErrorMessage(error));
     } finally {
       setLoading(false);
     }
